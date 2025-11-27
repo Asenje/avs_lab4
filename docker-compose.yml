@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: avs_lab4_db
+    environment:
+      POSTGRES_DB: contacts_db
+      POSTGRES_USER: contacts_user
+      POSTGRES_PASSWORD: contacts_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: avs_lab4_web
+    depends_on:
+      - db
+    environment:
+      SECRET_KEY: qwerty21322
+      POSTGRES_DB: contacts_db
+      POSTGRES_USER: contacts_user
+      POSTGRES_PASSWORD: contacts_password
+      POSTGRES_HOST: db
+    ports:
+      - "5555:5555"
+    restart: unless-stopped
+
+volumes:
+  db_data:
