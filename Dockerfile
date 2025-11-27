@@ -1,20 +1,19 @@
-# Этап 1: builder
 FROM python:3.9-buster AS builder
 
 WORKDIR /app
 
-# apt + requirements как раньше...
+
 
 COPY requirements.txt .
 
 RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
-# Этап 2: runner
+
 FROM python:3.9-slim-buster AS runner
 
 WORKDIR /app
 
-# Настроить репозитории + поставить postgresql-client
+
 RUN echo "deb http://archive.debian.org/debian/ buster main" > /etc/apt/sources.list && \
     echo "deb http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && \
     apt-get update && \
